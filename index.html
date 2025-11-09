@@ -29,27 +29,15 @@
           const [vn, setVn] = useState(1465);
           const [vg, setVg] = useState(1465);
           const [moneda, setMoneda] = useState('MXN');
-          const [rangoActual, setRangoActual] = useState(0); // índice del rango actual del socio
-          const [calcularBono, setCalcularBono] = useState(false);
 
-          // Bonos por avance de rango según país
           const bonosPorRango = {
-            'MXN': [0, 1500, 3000, 5000, 7500, 10000, 20000, 40000], // Índice 0 = sin bono, 1 = Rango 2 (Emprendedor), etc.
+            'MXN': [0, 1500, 3000, 5000, 7500, 10000, 20000, 40000],
             'USD': [0, 85, 165, 280, 390, 555, 1111, 2222],
             'COP': [0, 330000, 660000, 1100000, 1650000, 2220000, 4400000, 8800000]
           };
 
-          const monedaSimbolos = {
-            'MXN': '$',
-            'USD': '$',
-            'COP': '$'
-          };
-
-          const monedaNombres = {
-            'MXN': 'MXN',
-            'USD': 'USD',
-            'COP': 'COP'
-          };
+          const monedaSimbolos = { 'MXN': '$', 'USD': '$', 'COP': '$' };
+          const monedaNombres = { 'MXN': 'MXN', 'USD': 'USD', 'COP': 'COP' };
 
           const rangos = [
             { nombre: 'Visionario', vgRequerido: 1465, unilevelNiveles: 3, infinito: 0 },
@@ -109,15 +97,8 @@
             let unilevelPorNivel = Array(niveles).fill(0);
             let infinitoPorNivel = Array(niveles).fill(0);
             let matchPorNivel = Array(niveles).fill(0);
-            let bonosPorAvancePorNivel = Array(niveles).fill(0);
-            let personasConBonoAvancePorNivel = Array(niveles).fill(0);
             let embajadoresConInfinito = 0;
-            let detalleEmbajadores = {
-              transformador: 0,
-              inspirador: 0,
-              consciente: 0,
-              solidario: 0
-            };
+            let detalleEmbajadores = { transformador: 0, inspirador: 0, consciente: 0, solidario: 0 };
 
             const calcularComisionesPersona = (posicionNivel, profundidadDisponible) => {
               let vgPersona = vg;
@@ -130,7 +111,7 @@
               }
               
               const rangoPersona = calcularRango(vgPersona);
-              let unilevelPersona = 0, infinitoPersona = 0, matchPersona = 0;
+              let unilevelPersona = 0, infinitoPersona = 0;
 
               const nivelesUnilevel = Math.min(profundidadDisponible, rangoPersona.unilevelNiveles);
               for (let i = 0; i < nivelesUnilevel && i < 9; i++) {
@@ -147,9 +128,7 @@
                 }
               }
 
-              // BONO INFINITO: Solo para rangos Embajador (Transformador o superior) con infinito > 0
               if (rangoPersona.infinito > 0 && profundidadDisponible > rangoPersona.unilevelNiveles) {
-                // Encontrar el nivel más profundo de unilevel de los directos
                 let maxNivelUnilevelDirectos = 0;
                 
                 const numDirectos = directosPorNivel[posicionNivel + 1] || 0;
@@ -172,10 +151,8 @@
                   }
                 }
 
-                // El bono infinito inicia después del nivel unilevel del embajador o después del mejor directo
                 const nivelInicioInfinito = Math.max(rangoPersona.unilevelNiveles, maxNivelUnilevelDirectos + 1);
                 
-                // Calcular el bono infinito desde nivelInicioInfinito hasta profundidadDisponible
                 for (let i = nivelInicioInfinito; i < profundidadDisponible; i++) {
                   let personasEnNivel = 1;
                   for (let j = posicionNivel + 1; j <= posicionNivel + 1 + i && j < niveles; j++) {
@@ -194,10 +171,9 @@
                 }
               }
 
-              return { unilevelPersona, infinitoPersona, matchPersona };
+              return { unilevelPersona, infinitoPersona };
             };
 
-            // Calcular comisiones del líder principal (nivel -1, el que está arriba de todos)
             const rangoLiderPrincipal = calcularRango(vgTotalAcumulado);
             if (rangoLiderPrincipal.infinito > 0 && niveles > 0) {
               embajadoresConInfinito++;
@@ -216,7 +192,6 @@
               const profundidadDisponible = niveles - nivel - 1;
               
               for (let p = 0; p < personasEnNivel; p++) {
-                // Calcular VG de esta persona para determinar su rango
                 let vgPersona = vg;
                 for (let i = 1; i <= profundidadDisponible; i++) {
                   let personasEnSubNivel = 1;
@@ -227,7 +202,6 @@
                 }
                 const rangoPersona = calcularRango(vgPersona);
                 
-                // Contar embajadores con bono infinito
                 if (rangoPersona.infinito > 0 && profundidadDisponible > 0) {
                   embajadoresConInfinito++;
                   if (rangoPersona.nombre === 'Embajador Transformador') detalleEmbajadores.transformador++;
@@ -288,17 +262,14 @@
 
             comisionesTotales = comisionesUnilevelTotal + comisionesInfinitoTotal + comisionesMatchTotal;
 
-            // Calcular el rango alcanzado con el VG total del líder principal
             const rangoAlcanzado = calcularRango(vgTotalAcumulado);
             
-            // Calcular bonos por avance de rango para TODAS las personas en la estructura
             let totalBonosPorAvance = 0;
             let totalPersonasConBono = 0;
-            let detalleBonosPorRango = Array(8).fill(0); // Para contar cuántas personas alcanzan cada rango
-            let montosBonosPorRango = Array(8).fill(0); // Para sumar los montos por cada rango alcanzado
+            let detalleBonosPorRango = Array(8).fill(0);
+            let montosBonosPorRango = Array(8).fill(0);
 
-            // Calcular el bono del líder principal
-            if (calcularBono && rangoAlcanzado.indice > rangoActual && rangoAlcanzado.indice >= 1) {
+            if (rangoAlcanzado.indice >= 1) {
               const bonoPrincipal = bonosPorRango[moneda][rangoAlcanzado.indice] || 0;
               totalBonosPorAvance += bonoPrincipal;
               totalPersonasConBono++;
@@ -306,36 +277,28 @@
               montosBonosPorRango[rangoAlcanzado.indice - 1] += bonoPrincipal;
             }
 
-            // Calcular bonos para todas las personas en cada nivel de la estructura
-            if (calcularBono) {
-              for (let nivel = 0; nivel < niveles; nivel++) {
-                const personasEnNivel = estructura[nivel].personas;
-                const profundidadDisponible = niveles - nivel - 1;
+            for (let nivel = 0; nivel < niveles; nivel++) {
+              const personasEnNivel = estructura[nivel].personas;
+              const profundidadDisponible = niveles - nivel - 1;
+              
+              for (let p = 0; p < personasEnNivel; p++) {
+                let vgPersona = vg;
+                for (let i = 1; i <= profundidadDisponible; i++) {
+                  let personasEnSubNivel = 1;
+                  for (let j = nivel + 1; j <= nivel + i && j < niveles; j++) {
+                    personasEnSubNivel *= directosPorNivel[j];
+                  }
+                  vgPersona += personasEnSubNivel * vg;
+                }
                 
-                for (let p = 0; p < personasEnNivel; p++) {
-                  // Calcular el VG de esta persona
-                  let vgPersona = vg;
-                  for (let i = 1; i <= profundidadDisponible; i++) {
-                    let personasEnSubNivel = 1;
-                    for (let j = nivel + 1; j <= nivel + i && j < niveles; j++) {
-                      personasEnSubNivel *= directosPorNivel[j];
-                    }
-                    vgPersona += personasEnSubNivel * vg;
-                  }
-                  
-                  // Determinar el rango de esta persona
-                  const rangoPersona = calcularRango(vgPersona);
-                  
-                  // Si alcanza un rango superior al actual y es Rango 2 o mayor, recibe bono
-                  if (rangoPersona.indice > rangoActual && rangoPersona.indice >= 1) {
-                    const bonoPersona = bonosPorRango[moneda][rangoPersona.indice] || 0;
-                    totalBonosPorAvance += bonoPersona;
-                    totalPersonasConBono++;
-                    bonosPorAvancePorNivel[nivel] += bonoPersona;
-                    personasConBonoAvancePorNivel[nivel]++;
-                    detalleBonosPorRango[rangoPersona.indice - 1]++;
-                    montosBonosPorRango[rangoPersona.indice - 1] += bonoPersona;
-                  }
+                const rangoPersona = calcularRango(vgPersona);
+                
+                if (rangoPersona.indice >= 1) {
+                  const bonoPersona = bonosPorRango[moneda][rangoPersona.indice] || 0;
+                  totalBonosPorAvance += bonoPersona;
+                  totalPersonasConBono++;
+                  detalleBonosPorRango[rangoPersona.indice - 1]++;
+                  montosBonosPorRango[rangoPersona.indice - 1] += bonoPersona;
                 }
               }
             }
@@ -346,33 +309,14 @@
             const porcentajeGanancia = totalVentas > 0 ? (gananciaNeta / totalVentas) * 100 : 0;
 
             return {
-              estructura,
-              totalPersonas,
-              totalVentas,
-              comisionesTotales,
-              comisionesUnilevelTotal,
-              comisionesInfinitoTotal,
-              comisionesMatchTotal,
-              totalBonosPorAvance,
-              totalPersonasConBono,
-              detalleBonosPorRango,
-              montosBonosPorRango,
-              totalComisionesConBono,
-              gananciaNeta,
-              porcentajeComisiones,
-              porcentajeGanancia,
-              comisionesPorNivel,
-              unilevelPorNivel,
-              infinitoPorNivel,
-              matchPorNivel,
-              bonosPorAvancePorNivel,
-              personasConBonoAvancePorNivel,
-              vgTotalAcumulado,
-              rangoAlcanzado,
-              embajadoresConInfinito,
-              detalleEmbajadores
+              estructura, totalPersonas, totalVentas, comisionesTotales,
+              comisionesUnilevelTotal, comisionesInfinitoTotal, comisionesMatchTotal,
+              totalBonosPorAvance, totalPersonasConBono, detalleBonosPorRango, montosBonosPorRango,
+              totalComisionesConBono, gananciaNeta, porcentajeComisiones, porcentajeGanancia,
+              comisionesPorNivel, unilevelPorNivel, infinitoPorNivel, matchPorNivel,
+              vgTotalAcumulado, rangoAlcanzado, embajadoresConInfinito, detalleEmbajadores
             };
-          }, [niveles, directosPorNivel, vn, vg, moneda, rangoActual, calcularBono]);
+          }, [niveles, directosPorNivel, vn, vg, moneda]);
 
           return (
             <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50 py-8 px-4">
@@ -441,59 +385,15 @@
                 </div>
 
                 <div className="bg-gradient-to-r from-yellow-400 to-orange-500 rounded-xl shadow-2xl p-6 mb-6 text-white">
-                  <h2 className="text-2xl font-bold mb-4 flex items-center gap-2">
-                    <Star /> Configuración de Bono por Avance de Rango
+                  <h2 className="text-2xl font-bold mb-3 flex items-center gap-2">
+                    <Star /> Total de Bonos por Avance de Rango
                   </h2>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-sm font-semibold mb-2">Rango Actual del Socio</label>
-                      <select 
-                        value={rangoActual} 
-                        onChange={(e) => setRangoActual(parseInt(e.target.value))}
-                        className="w-full px-4 py-3 border-2 border-orange-300 rounded-lg focus:border-orange-500 focus:outline-none text-lg font-semibold text-gray-800"
-                      >
-                        <option value="0">Rango 1: Visionario</option>
-                        <option value="1">Rango 2: Emprendedor</option>
-                        <option value="2">Rango 3: Creativo</option>
-                        <option value="3">Rango 4: Innovador</option>
-                        <option value="4">Rango 5: Transformador</option>
-                        <option value="5">Rango 6: Inspirador</option>
-                        <option value="6">Rango 7: Consciente</option>
-                        <option value="7">Rango 8: Solidario</option>
-                      </select>
-                    </div>
-
-                    <div>
-                      <label className="block text-sm font-semibold mb-2">¿Calcular Bono por Avance?</label>
-                      <div className="flex items-center space-x-4 mt-3">
-                        <label className="flex items-center cursor-pointer">
-                          <input 
-                            type="radio" 
-                            checked={calcularBono === true} 
-                            onChange={() => setCalcularBono(true)}
-                            className="w-5 h-5 text-orange-600"
-                          />
-                          <span className="ml-2 text-lg font-semibold">Sí</span>
-                        </label>
-                        <label className="flex items-center cursor-pointer">
-                          <input 
-                            type="radio" 
-                            checked={calcularBono === false} 
-                            onChange={() => setCalcularBono(false)}
-                            className="w-5 h-5 text-orange-600"
-                          />
-                          <span className="ml-2 text-lg font-semibold">No</span>
-                        </label>
-                      </div>
-                    </div>
-                  </div>
-
-                  {calcularBono && calculos.totalPersonasConBono > 0 && (
-                    <div className="mt-4 bg-white bg-opacity-20 rounded-lg p-4 border-2 border-white">
+                  {calculos.totalPersonasConBono > 0 ? (
+                    <div className="bg-white bg-opacity-20 rounded-lg p-4 border-2 border-white">
                       <p className="text-2xl font-bold mb-2">
-                        🎉 Total de Bonos por Avance de Rango en toda la estructura
+                        🎉 Total de Bonos por Avance en toda la estructura
                       </p>
-                      <p className="text-4xl font-bold mt-2">
+                      <p className="text-5xl font-bold mt-2">
                         {monedaSimbolos[moneda]}{calculos.totalBonosPorAvance.toLocaleString()} {monedaNombres[moneda]}
                       </p>
                       <p className="text-lg mt-2">
@@ -501,6 +401,12 @@
                       </p>
                       <p className="text-sm mt-1 text-yellow-100">
                         * Estos bonos se otorgan por única ocasión al alcanzar por primera vez cada rango
+                      </p>
+                    </div>
+                  ) : (
+                    <div className="bg-white bg-opacity-20 rounded-lg p-4 border-2 border-white">
+                      <p className="text-lg">
+                        Ninguna persona en la estructura alcanza Rango 2 o superior para recibir bono por avance.
                       </p>
                     </div>
                   )}
@@ -646,7 +552,7 @@
                   </div>
                 )}
 
-                <div className="bg-white rounded-xl shadow-xl p-6">
+                <div className="bg-white rounded-xl shadow-xl p-6 mb-6">
                   <h3 className="text-2xl font-bold text-gray-800 mb-4 border-b-2 border-blue-500 pb-2">💰 Comisiones Pagadas por Nivel</h3>
                   <div className="overflow-x-auto">
                     <table className="w-full">
@@ -700,8 +606,8 @@
                   </div>
                 </div>
 
-                {calcularBono && calculos.totalPersonasConBono > 0 && (
-                  <div className="bg-white rounded-xl shadow-xl p-6 mt-6">
+                {calculos.totalPersonasConBono > 0 && (
+                  <div className="bg-white rounded-xl shadow-xl p-6 mb-6">
                     <h3 className="text-2xl font-bold text-gray-800 mb-4 border-b-2 border-orange-500 pb-2 flex items-center gap-2">
                       <Star /> Desglose de Bonos por Avance de Rango
                     </h3>
@@ -781,8 +687,9 @@
 
                 <div className="mt-6 bg-yellow-50 border-l-4 border-yellow-400 p-4 rounded">
                   <p className="text-sm text-gray-700">
-                    <strong>Nota sobre el Bono por Avance:</strong> Este bono se califica a partir del Rango 2 (Emprendedor) y se otorga por única ocasión al alcanzar por primera vez cada rango. 
-                    {calcularBono && rangoActual === 1 && " El bono de Emprendedor aplica solo durante los primeros 30 días apartir de la inscripción."}
+                    <strong>Nota sobre el Bono por Avance:</strong> Cada persona en la estructura recibe el bono correspondiente al rango que alcanza según su VG total. 
+                    El bono se califica a partir del Rango 2 (Emprendedor) y se otorga por única ocasión al alcanzar por primera vez cada rango.
+                    El bono de Emprendedor aplica solo durante los primeros 30 días a partir de la inscripción.
                   </p>
                 </div>
               </div>
