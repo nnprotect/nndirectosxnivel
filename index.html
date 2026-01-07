@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculadora Ganancias Empresa - NN Protect (Actualizada)</title>
+    <title>Calculadora Ganancias Empresa - ONANO</title>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
@@ -21,40 +21,38 @@
         const Users = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>;
         const PieChart = () => <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M21.21 15.89A10 10 0 1 1 8 2.83"/><path d="M22 12A10 10 0 0 0 12 2v10z"/></svg>;
 
-        const CalculadoraEmpresaNN = () => {
-          const [niveles, setNiveles] = useState(9);
-          const [directosPorNivel, setDirectosPorNivel] = useState([3,3,3,3,3,3,3,3,3]);
-          const [vn, setVn] = useState(1465);
-          const [vg, setVg] = useState(1465);
+        const CalculadoraEmpresaONANO = () => {
+          const [directos, setDirectos] = useState(3);
+          const [niveles, setNiveles] = useState(12);
+          const [vn, setVn] = useState(1800);
+          const [vg, setVg] = useState(1800);
 
           // RANGOS ACTUALIZADOS
           const rangos = [
-            { nombre: 'Socio', pvRequerido: 100, gvRequerido: 100, infinito: 0, bonoAvance: 0, piernaMaxima: null },
-            { nombre: 'Bronce', pvRequerido: 100, gvRequerido: 1000, infinito: 0, bonoAvance: 100, piernaMaxima: null },
-            { nombre: 'Plata', pvRequerido: 100, gvRequerido: 3000, infinito: 0.5, bonoAvance: 150, piernaMaxima: { porcentaje: 0.6, volumen: 1800 } },
-            { nombre: 'Oro', pvRequerido: 100, gvRequerido: 5000, infinito: 0.75, bonoAvance: 200, piernaMaxima: { porcentaje: 0.6, volumen: 3000 } },
-            { nombre: 'Platino', pvRequerido: 100, gvRequerido: 10000, infinito: 1.0, bonoAvance: 250, piernaMaxima: { porcentaje: 0.6, volumen: 6000 } },
-            { nombre: 'Diamante', pvRequerido: 100, gvRequerido: 25000, infinito: 1.25, bonoAvance: 500, piernaMaxima: { porcentaje: 0.6, volumen: 15000 } },
-            { nombre: 'Doble Diamante', pvRequerido: 100, gvRequerido: 50000, infinito: 1.5, bonoAvance: 1000, piernaMaxima: { porcentaje: 0.6, volumen: 30000 } },
-            { nombre: 'Triple Diamante', pvRequerido: 100, gvRequerido: 100000, infinito: 1.75, bonoAvance: 2500, piernaMaxima: { porcentaje: 0.6, volumen: 60000 } },
-            { nombre: 'Diamante Embajador', pvRequerido: 100, gvRequerido: 250000, infinito: 1.5, bonoAvance: 5000, piernaMaxima: { porcentaje: 0.6, volumen: 150000 } },
-            { nombre: 'Doble Diamante Embajador', pvRequerido: 100, gvRequerido: 500000, infinito: 1.75, bonoAvance: 10000, piernaMaxima: { porcentaje: 0.6, volumen: 300000 } },
-            { nombre: 'Triple Diamante Embajador', pvRequerido: 100, gvRequerido: 1000000, infinito: 2.0, bonoAvance: 25000, piernaMaxima: { porcentaje: 0.6, volumen: 600000 } }
+            { nombre: 'Socio', pvRequerido: 100, gvRequerido: 100, infinito: 0, bonoAvance: 0 },
+            { nombre: 'Bronce', pvRequerido: 100, gvRequerido: 1000, infinito: 0, bonoAvance: 100 },
+            { nombre: 'Plata', pvRequerido: 100, gvRequerido: 3000, infinito: 0, bonoAvance: 150 },
+            { nombre: 'Oro', pvRequerido: 100, gvRequerido: 5000, infinito: 0, bonoAvance: 200 },
+            { nombre: 'Platino', pvRequerido: 100, gvRequerido: 10000, infinito: 0.5, bonoAvance: 250 },
+            { nombre: 'Diamante', pvRequerido: 100, gvRequerido: 25000, infinito: 0.75, bonoAvance: 500 },
+            { nombre: 'Doble Diamante', pvRequerido: 100, gvRequerido: 50000, infinito: 1.0, bonoAvance: 1000 },
+            { nombre: 'Triple Diamante', pvRequerido: 100, gvRequerido: 100000, infinito: 1.25, bonoAvance: 2500 },
+            { nombre: 'Diamante Embajador', pvRequerido: 100, gvRequerido: 250000, infinito: 1.5, bonoAvance: 5000 },
+            { nombre: 'Doble Diamante Embajador', pvRequerido: 100, gvRequerido: 500000, infinito: 1.75, bonoAvance: 10000 },
+            { nombre: 'Triple Diamante Embajador', pvRequerido: 100, gvRequerido: 1000000, infinito: 2.0, bonoAvance: 25000 }
           ];
 
-          // PORCENTAJES UNILEVEL ACTUALIZADOS (9 niveles)
           const porcentajesUnilevel = [6, 8, 10, 12, 5, 4, 3, 2, 2];
 
-          // PORCENTAJES MATCH ACTUALIZADOS
           const porcentajesMatchPorRango = {
             'Socio': { niveles: [], porcentajes: [] },
             'Bronce': { niveles: [], porcentajes: [] },
             'Plata': { niveles: [1], porcentajes: [5] },
-            'Oro': { niveles: [1, 2], porcentajes: [10, 5] },
-            'Platino': { niveles: [1, 2, 3], porcentajes: [15, 5, 5] },
-            'Diamante': { niveles: [1, 2, 3, 4], porcentajes: [25, 10, 5, 5] },
-            'Doble Diamante': { niveles: [1, 2, 3, 4], porcentajes: [25, 10, 5, 5] },
-            'Triple Diamante': { niveles: [1, 2, 3, 4], porcentajes: [25, 10, 5, 5] },
+            'Oro': { niveles: [1], porcentajes: [10] },
+            'Platino': { niveles: [1], porcentajes: [15] },
+            'Diamante': { niveles: [1, 2], porcentajes: [25, 5] },
+            'Doble Diamante': { niveles: [1, 2, 3], porcentajes: [25, 10, 5] },
+            'Triple Diamante': { niveles: [1, 2, 3, 4], porcentajes: [25, 10, 10, 5] },
             'Diamante Embajador': { niveles: [1, 2, 3, 4, 5], porcentajes: [25, 15, 10, 5, 1] },
             'Doble Diamante Embajador': { niveles: [1, 2, 3, 4, 5], porcentajes: [25, 15, 10, 5, 3] },
             'Triple Diamante Embajador': { niveles: [1, 2, 3, 4, 5], porcentajes: [25, 15, 10, 5, 5] }
@@ -66,186 +64,160 @@
                 return rangos[i];
               }
             }
-            return rangos[0]; // Socio por defecto
-          };
-
-          const handleNivelesChange = (newNiveles) => {
-            setNiveles(newNiveles);
-            const newDirectos = [...directosPorNivel];
-            if (newNiveles > directosPorNivel.length) {
-              for (let i = directosPorNivel.length; i < newNiveles; i++) newDirectos.push(3);
-            } else {
-              newDirectos.length = newNiveles;
-            }
-            setDirectosPorNivel(newDirectos);
-          };
-
-          const handleDirectosChange = (nivel, valor) => {
-            const newDirectos = [...directosPorNivel];
-            newDirectos[nivel] = parseInt(valor) || 0;
-            setDirectosPorNivel(newDirectos);
+            return rangos[0];
           };
 
           const calculos = useMemo(() => {
             const estructura = [];
-            let gvTotalAcumulado = vg;
             let pvTotalAcumulado = vn;
-            let totalPersonas = 0;
+            let gvTotalAcumulado = vg;
             
-            for (let nivel = 0; nivel < niveles; nivel++) {
-              let personas = 1;
-              for (let i = 0; i <= nivel; i++) personas *= directosPorNivel[i];
-              const gvNivel = personas * vg;
-              const pvNivel = personas * vn;
-              gvTotalAcumulado += gvNivel;
-              pvTotalAcumulado += pvNivel;
-              totalPersonas += personas;
-              estructura.push({ nivel: nivel + 1, personas, gvNivel, pvNivel });
+            for (let nivel = 1; nivel <= niveles; nivel++) {
+              const personas = Math.pow(directos, nivel);
+              estructura.push({ 
+                nivel, 
+                personas, 
+                pvNivel: personas * vn,
+                gvNivel: personas * vg 
+              });
+              pvTotalAcumulado += personas * vn;
+              gvTotalAcumulado += personas * vg;
             }
 
-            const totalVentas = (totalPersonas + 1) * vn;
-            let comisionesTotales = 0, comisionesUnilevelTotal = 0, comisionesInfinitoTotal = 0, comisionesMatchTotal = 0, comisionesAvanceRangoTotal = 0;
-            let comisionesPorNivel = Array(niveles).fill(0);
+            const totalPersonas = estructura.reduce((sum, e) => sum + e.personas, 1);
+            const totalVentas = totalPersonas * vn;
+
+            let comisionesUnilevelTotal = 0;
+            let comisionesInfinitoTotal = 0;
+            let comisionesMatchTotal = 0;
+            let comisionesAvanceRangoTotal = 0;
+
             let unilevelPorNivel = Array(niveles).fill(0);
             let infinitoPorNivel = Array(niveles).fill(0);
             let matchPorNivel = Array(niveles).fill(0);
+            
+            // Contador de personas por rango para avance
+            const personasPorRango = {};
+            rangos.forEach(r => personasPorRango[r.nombre] = 0);
 
-            const calcularComisionesPersona = (posicionNivel, profundidadDisponible) => {
-              let pvPersona = vn;
-              let gvPersona = vg;
-              
-              for (let i = 1; i <= profundidadDisponible; i++) {
-                let personasEnNivel = 1;
-                for (let j = posicionNivel + 1; j <= posicionNivel + i && j < niveles; j++) {
-                  personasEnNivel *= directosPorNivel[j];
-                }
-                pvPersona += personasEnNivel * vn;
-                gvPersona += personasEnNivel * vg;
-              }
-              
-              const rangoPersona = calcularRango(pvPersona, gvPersona);
-              let unilevelPersona = 0, infinitoPersona = 0, matchPersona = 0;
+            // CALCULAR COMISIONES PARA CADA PERSONA EN CADA NIVEL
+            for (let nivelPersona = 0; nivelPersona <= niveles; nivelPersona++) {
+              const personasEnEsteNivel = nivelPersona === 0 ? 1 : estructura[nivelPersona - 1].personas;
+              const profundidadDisponible = niveles - nivelPersona;
 
-              // BONO UNILEVEL - SIEMPRE SE COBRA (sin necesidad de calificar a rango)
-              const nivelesUnilevel = Math.min(profundidadDisponible, 9);
-              for (let i = 0; i < nivelesUnilevel; i++) {
-                let personasEnNivel = 1;
-                for (let j = posicionNivel + 1; j <= posicionNivel + 1 + i && j < niveles; j++) {
-                  personasEnNivel *= directosPorNivel[j];
-                }
-                const comision = personasEnNivel * vn * (porcentajesUnilevel[i] / 100);
-                unilevelPersona += comision;
-                const nivelAbsoluto = posicionNivel + i;
-                if (nivelAbsoluto < niveles) {
-                  comisionesPorNivel[nivelAbsoluto] += comision;
-                  unilevelPorNivel[nivelAbsoluto] += comision;
-                }
-              }
+              for (let p = 0; p < personasEnEsteNivel; p++) {
+                let pvPersona = vn;
+                let gvPersona = vg;
 
-              // BONO INFINITO - Solo desde Plata en adelante (nivel 10 al infinito)
-              if (profundidadDisponible > 9 && rangoPersona.infinito > 0) {
-                const directosInfo = [];
-                const numDirectos = directosPorNivel[posicionNivel + 1] || 0;
+                for (let i = 1; i <= profundidadDisponible; i++) {
+                  const personasSubnivel = Math.pow(directos, i);
+                  pvPersona += personasSubnivel * vn;
+                  gvPersona += personasSubnivel * vg;
+                }
+
+                const rangoPersona = calcularRango(pvPersona, gvPersona);
                 
-                for (let d = 0; d < numDirectos; d++) {
-                  let pvDirecto = vn;
-                  let gvDirecto = vg;
+                // Contar persona por rango
+                personasPorRango[rangoPersona.nombre]++;
+
+                // === BONO UNILEVEL ===
+                for (let i = 0; i < Math.min(profundidadDisponible, 9); i++) {
+                  const personasEnNivel = Math.pow(directos, i + 1);
+                  const comision = personasEnNivel * vn * (porcentajesUnilevel[i] / 100);
+                  comisionesUnilevelTotal += comision;
                   
-                  for (let i = 1; i <= profundidadDisponible - 1; i++) {
-                    let personasEnSubnivel = 1;
-                    for (let j = posicionNivel + 2; j <= posicionNivel + 1 + i && j < niveles; j++) {
-                      personasEnSubnivel *= directosPorNivel[j];
-                    }
-                    pvDirecto += personasEnSubnivel * vn;
-                    gvDirecto += personasEnSubnivel * vg;
+                  const nivelAbsoluto = nivelPersona + i + 1;
+                  if (nivelAbsoluto <= niveles) {
+                    unilevelPorNivel[nivelAbsoluto - 1] += comision;
                   }
-                  
-                  const rangoDirecto = calcularRango(pvDirecto, gvDirecto);
-                  directosInfo.push(rangoDirecto);
                 }
 
-                directosInfo.sort((a, b) => rangos.findIndex(r => r.nombre === b.nombre) - rangos.findIndex(r => r.nombre === a.nombre));
+                // === BONO INFINITO ===
+                // IMPORTANTE: Se cobra directamente el porcentaje del infinito sobre TODAS las personas
+                // del nivel 10 en adelante, SIN considerar breakaway en estructuras uniformes
+                if (profundidadDisponible > 9 && rangoPersona.infinito > 0) {
+                  for (let i = 9; i < profundidadDisponible; i++) {
+                    const personasEnNivel = Math.pow(directos, i + 1);
+                    const comision = personasEnNivel * vn * (rangoPersona.infinito / 100);
+                    comisionesInfinitoTotal += comision;
+                    
+                    const nivelAbsoluto = nivelPersona + i + 1;
+                    if (nivelAbsoluto <= niveles) {
+                      infinitoPorNivel[nivelAbsoluto - 1] += comision;
+                    }
+                  }
+                }
 
-                for (let d = 0; d < directosInfo.length; d++) {
-                  const rangoDirecto = directosInfo[d];
-                  const rangoIndexPersona = rangos.findIndex(r => r.nombre === rangoPersona.nombre);
-                  const rangoIndexDirecto = rangos.findIndex(r => r.nombre === rangoDirecto.nombre);
-                  
-                  const porcentajeDiferencia = (rangoIndexPersona > rangoIndexDirecto) ? 
-                    rangoPersona.infinito - rangoDirecto.infinito : rangoPersona.infinito;
-                  
-                  if (porcentajeDiferencia > 0) {
-                    let volumenDirecto = vn;
-                    for (let i = 1; i <= profundidadDisponible - 1; i++) {
-                      let personasEnSubnivel = 1;
-                      for (let j = posicionNivel + 2; j <= posicionNivel + 1 + i && j < niveles; j++) {
-                        personasEnSubnivel *= directosPorNivel[j];
+                // === BONO MATCH ===
+                const matchConfig = porcentajesMatchPorRango[rangoPersona.nombre];
+                
+                if (matchConfig && matchConfig.niveles.length > 0) {
+                  for (let i = 0; i < matchConfig.niveles.length && i < profundidadDisponible; i++) {
+                    const nivelProfundidad = i + 1;
+                    const personasEnNivel = Math.pow(directos, nivelProfundidad);
+                    const porcentajeMatch = matchConfig.porcentajes[i];
+                    
+                    const profundidadDisponibleParaCadaPersona = profundidadDisponible - nivelProfundidad;
+                    
+                    if (profundidadDisponibleParaCadaPersona >= 1) {
+                      let bonoUnilevelPorPersona = 0;
+                      
+                      const nivelesUnilevelDisponibles = Math.min(profundidadDisponibleParaCadaPersona, 9);
+                      for (let k = 0; k < nivelesUnilevelDisponibles; k++) {
+                        const personasSubnivel = Math.pow(directos, k + 1);
+                        bonoUnilevelPorPersona += personasSubnivel * vn * (porcentajesUnilevel[k] / 100);
                       }
-                      volumenDirecto += personasEnSubnivel * vn;
-                    }
-                    
-                    const comisionInfinito = volumenDirecto * (porcentajeDiferencia / 100);
-                    infinitoPersona += comisionInfinito;
-                    
-                    const nivel10Index = posicionNivel + 9;
-                    if (nivel10Index < niveles) {
-                      comisionesPorNivel[nivel10Index] += comisionInfinito;
-                      infinitoPorNivel[nivel10Index] += comisionInfinito;
+                      
+                      if (profundidadDisponibleParaCadaPersona > 9) {
+                        let pvPersonaEnNivel = vn;
+                        let gvPersonaEnNivel = vg;
+                        
+                        for (let k = 1; k <= profundidadDisponibleParaCadaPersona; k++) {
+                          const personasSubnivel = Math.pow(directos, k);
+                          pvPersonaEnNivel += personasSubnivel * vn;
+                          gvPersonaEnNivel += personasSubnivel * vg;
+                        }
+                        
+                        const rangoPersonaEnNivel = calcularRango(pvPersonaEnNivel, gvPersonaEnNivel);
+                        
+                        if (rangoPersonaEnNivel.infinito > 0) {
+                          for (let k = 9; k < profundidadDisponibleParaCadaPersona; k++) {
+                            const personasSubnivel = Math.pow(directos, k + 1);
+                            bonoUnilevelPorPersona += personasSubnivel * vn * (rangoPersonaEnNivel.infinito / 100);
+                          }
+                        }
+                      }
+                      
+                      const comisionMatch = personasEnNivel * bonoUnilevelPorPersona * (porcentajeMatch / 100);
+                      comisionesMatchTotal += comisionMatch;
+                      
+                      const nivelAbsoluto = nivelPersona + nivelProfundidad;
+                      if (nivelAbsoluto <= niveles) {
+                        matchPorNivel[nivelAbsoluto - 1] += comisionMatch / personasEnNivel;
+                      }
                     }
                   }
                 }
               }
+            }
 
-              // BONO MATCH - REQUIERE CALIFICACIÓN DE RANGO
-              const matchConfig = porcentajesMatchPorRango[rangoPersona.nombre];
-              if (matchConfig && matchConfig.niveles.length > 0) {
-                const numDirectos = directosPorNivel[posicionNivel + 1] || 0;
-                
-                for (let d = 0; d < numDirectos && d < matchConfig.niveles.length; d++) {
-                  let unilevelDirecto = 0;
-                  
-                  for (let i = 0; i < 9 && i < profundidadDisponible - 1; i++) {
-                    let personasEnSubnivel = 1;
-                    for (let j = posicionNivel + 2; j <= posicionNivel + 2 + i && j < niveles; j++) {
-                      personasEnSubnivel *= directosPorNivel[j];
-                    }
-                    unilevelDirecto += personasEnSubnivel * vn * (porcentajesUnilevel[i] / 100);
-                  }
-                  
-                  const comisionMatch = unilevelDirecto * (matchConfig.porcentajes[d] / 100);
-                  matchPersona += comisionMatch;
-                  
-                  for (let i = 0; i < 5 && posicionNivel + i < niveles; i++) {
-                    comisionesPorNivel[posicionNivel + i] += comisionMatch / 5;
-                    matchPorNivel[posicionNivel + i] += comisionMatch / 5;
-                  }
-                }
+            // === BONO AVANCE DE RANGO ===
+            const desgloseavanceRango = [];
+            rangos.forEach(rango => {
+              if (rango.bonoAvance > 0 && personasPorRango[rango.nombre] > 0) {
+                const totalBono = personasPorRango[rango.nombre] * rango.bonoAvance;
+                comisionesAvanceRangoTotal += totalBono;
+                desgloseavanceRango.push({
+                  rango: rango.nombre,
+                  personas: personasPorRango[rango.nombre],
+                  bonoPorPersona: rango.bonoAvance,
+                  totalBono
+                });
               }
+            });
 
-              return { unilevelPersona, infinitoPersona, matchPersona, rangoPersona };
-            };
-
-            // Calcular comisiones para cada persona en cada nivel
-            for (let nivel = 0; nivel < niveles; nivel++) {
-              let personas = 1;
-              for (let i = 0; i <= nivel; i++) personas *= directosPorNivel[i];
-              
-              const profundidadDisponible = niveles - nivel - 1;
-              const { unilevelPersona, infinitoPersona, matchPersona } = calcularComisionesPersona(nivel, profundidadDisponible);
-              
-              comisionesUnilevelTotal += unilevelPersona * personas;
-              comisionesInfinitoTotal += infinitoPersona * personas;
-              comisionesMatchTotal += matchPersona * personas;
-            }
-
-            // BONO AVANCE DE RANGO (asumiendo que cada persona avanza una vez a su máximo rango)
-            // Esta es una simplificación - en realidad se paga una sola vez al alcanzar el rango
-            const rangoTop = calcularRango(pvTotalAcumulado, gvTotalAcumulado);
-            if (rangoTop.bonoAvance > 0) {
-              comisionesAvanceRangoTotal = rangoTop.bonoAvance;
-            }
-
-            comisionesTotales = comisionesUnilevelTotal + comisionesInfinitoTotal + comisionesMatchTotal + comisionesAvanceRangoTotal;
+            const comisionesTotales = comisionesUnilevelTotal + comisionesInfinitoTotal + comisionesMatchTotal + comisionesAvanceRangoTotal;
+            const comisionesPorNivel = unilevelPorNivel.map((u, i) => u + infinitoPorNivel[i] + matchPorNivel[i]);
             const gananciaNeta = totalVentas - comisionesTotales;
             const porcentajeComisiones = (comisionesTotales / totalVentas) * 100;
             const porcentajeGanancia = (gananciaNeta / totalVentas) * 100;
@@ -266,9 +238,9 @@
               unilevelPorNivel,
               infinitoPorNivel,
               matchPorNivel,
-              rangoAlcanzado: rangoTop.nombre
+              desgloseavanceRango
             };
-          }, [niveles, directosPorNivel, vn, vg]);
+          }, [directos, niveles, vn, vg]);
 
           return (
             <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-8">
@@ -277,51 +249,28 @@
                   <h1 className="text-5xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600 mb-2">
                     Calculadora de Ganancias Empresa
                   </h1>
-                  <p className="text-xl text-gray-600">NN Protect - Plan de Compensación 2026</p>
-                  <p className="text-lg text-indigo-600 font-semibold mt-2">Rango Alcanzado: {calculos.rangoAlcanzado}</p>
+                  <p className="text-xl text-gray-600">ONANO - Plan de Compensación 2026</p>
                 </div>
 
                 <div className="bg-white rounded-xl shadow-2xl p-6 mb-6">
-                  <h2 className="text-2xl font-bold text-gray-800 mb-4">Parámetros Iniciales</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <h2 className="text-2xl font-bold text-gray-800 mb-4">Parámetros de Simulación</h2>
+                  <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">Niveles de Profundidad</label>
-                      <input type="number" min="1" max="20" value={niveles} onChange={(e) => handleNivelesChange(parseInt(e.target.value) || 1)} className="w-full px-4 py-3 border-2 border-blue-300 rounded-lg focus:border-blue-500 focus:outline-none text-lg font-semibold" />
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Directos por Persona</label>
+                      <input type="number" min="1" max="20" value={directos} onChange={(e) => setDirectos(parseInt(e.target.value) || 1)} className="w-full px-4 py-3 border-2 border-blue-300 rounded-lg focus:border-blue-500 focus:outline-none text-lg font-semibold" />
                     </div>
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">VN por Persona (USD)</label>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Niveles de Profundidad</label>
+                      <input type="number" min="1" max="20" value={niveles} onChange={(e) => setNiveles(parseInt(e.target.value) || 1)} className="w-full px-4 py-3 border-2 border-blue-300 rounded-lg focus:border-blue-500 focus:outline-none text-lg font-semibold" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">CV por Persona</label>
                       <input type="number" min="0" step="10" value={vn} onChange={(e) => setVn(parseFloat(e.target.value) || 0)} className="w-full px-4 py-3 border-2 border-green-300 rounded-lg focus:border-green-500 focus:outline-none text-lg font-semibold" />
                     </div>
                     <div>
-                      <label className="block text-sm font-semibold text-gray-700 mb-2">VG por Persona (USD)</label>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">GV por Persona</label>
                       <input type="number" min="0" step="10" value={vg} onChange={(e) => setVg(parseFloat(e.target.value) || 0)} className="w-full px-4 py-3 border-2 border-purple-300 rounded-lg focus:border-purple-500 focus:outline-none text-lg font-semibold" />
                     </div>
-                  </div>
-                </div>
-
-                <div className="bg-white rounded-xl shadow-2xl p-6 mb-6">
-                  <h2 className="text-2xl font-bold text-gray-800 mb-4">Configurar Directos por Nivel</h2>
-                  <div className="overflow-x-auto">
-                    <table className="w-full">
-                      <thead className="bg-blue-100">
-                        <tr>
-                          <th className="px-4 py-3 text-left font-semibold">Nivel</th>
-                          <th className="px-4 py-3 text-center font-semibold">Directos por Persona</th>
-                          <th className="px-4 py-3 text-right font-semibold">Total Personas en Nivel</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        {directosPorNivel.map((d, idx) => (
-                          <tr key={idx} className="border-b hover:bg-gray-50">
-                            <td className="px-4 py-3 font-semibold text-blue-600">Nivel {idx + 1}</td>
-                            <td className="px-4 py-3 text-center">
-                              <input type="number" min="0" max="20" value={d} onChange={(e) => handleDirectosChange(idx, e.target.value)} className="w-24 px-3 py-2 border-2 border-blue-300 rounded-lg text-center font-semibold focus:border-blue-500 focus:outline-none" />
-                            </td>
-                            <td className="px-4 py-3 text-right font-semibold text-gray-700">{calculos.estructura[idx]?.personas.toLocaleString() || 0}</td>
-                          </tr>
-                        ))}
-                      </tbody>
-                    </table>
                   </div>
                 </div>
 
@@ -332,7 +281,7 @@
                     <p className="text-blue-100 text-sm mt-1">personas totales</p>
                   </div>
                   <div className="bg-gradient-to-br from-green-500 to-emerald-600 rounded-xl shadow-xl p-6 text-white">
-                    <div className="flex items-center gap-3 mb-2"><TrendingUp /><h3 className="text-lg font-semibold">Total Ventas (VN)</h3></div>
+                    <div className="flex items-center gap-3 mb-2"><TrendingUp /><h3 className="text-lg font-semibold">Total Ventas (CV)</h3></div>
                     <p className="text-4xl font-bold">${calculos.totalVentas.toLocaleString(undefined, {minimumFractionDigits: 2})}</p>
                     <p className="text-green-100 text-sm mt-1">ingresos brutos</p>
                   </div>
@@ -371,6 +320,62 @@
                   </div>
                 </div>
 
+                <div className="bg-white rounded-xl shadow-xl p-6 mb-6">
+                  <h3 className="text-2xl font-bold text-gray-800 mb-4 border-b-2 border-indigo-500 pb-2">🏆 Tabla de Rangos y Bonos</h3>
+                  <div className="overflow-x-auto">
+                    <table className="w-full">
+                      <thead className="bg-indigo-100">
+                        <tr>
+                          <th className="px-4 py-3 text-left font-semibold">Rango</th>
+                          <th className="px-4 py-3 text-right font-semibold">CV Requerido</th>
+                          <th className="px-4 py-3 text-right font-semibold">GV Requerido</th>
+                          <th className="px-4 py-3 text-right font-semibold">Infinito %</th>
+                          <th className="px-4 py-3 text-right font-semibold">Bono Avance</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {rangos.map((rango, idx) => (
+                          <tr key={idx} className="border-b hover:bg-gray-50">
+                            <td className="px-4 py-3 font-semibold">{rango.nombre}</td>
+                            <td className="px-4 py-3 text-right">{rango.pvRequerido.toLocaleString()}</td>
+                            <td className="px-4 py-3 text-right">{rango.gvRequerido.toLocaleString()}</td>
+                            <td className="px-4 py-3 text-right text-purple-600 font-semibold">{rango.infinito > 0 ? `${rango.infinito}%` : '-'}</td>
+                            <td className="px-4 py-3 text-right text-green-600 font-bold">{rango.bonoAvance > 0 ? `$${rango.bonoAvance.toLocaleString()}` : '-'}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {calculos.desgloseavanceRango.length > 0 && (
+                  <div className="bg-white rounded-xl shadow-xl p-6 mb-6">
+                    <h3 className="text-2xl font-bold text-gray-800 mb-4 border-b-2 border-amber-500 pb-2">🎖️ Desglose de Bonos por Avance de Rango</h3>
+                    <div className="overflow-x-auto">
+                      <table className="w-full">
+                        <thead className="bg-amber-100">
+                          <tr>
+                            <th className="px-4 py-3 text-left font-semibold">Rango</th>
+                            <th className="px-4 py-3 text-right font-semibold">Personas que Alcanzaron</th>
+                            <th className="px-4 py-3 text-right font-semibold">Bono por Persona</th>
+                            <th className="px-4 py-3 text-right font-semibold">Total Pagado</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {calculos.desgloseavanceRango.map((item, idx) => (
+                            <tr key={idx} className="border-b hover:bg-gray-50">
+                              <td className="px-4 py-3 font-semibold">{item.rango}</td>
+                              <td className="px-4 py-3 text-right">{item.personas.toLocaleString()}</td>
+                              <td className="px-4 py-3 text-right text-green-600">${item.bonoPorPersona.toLocaleString()}</td>
+                              <td className="px-4 py-3 text-right font-bold text-amber-600">${item.totalBono.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                )}
+
                 <div className="bg-white rounded-xl shadow-xl p-6">
                   <h3 className="text-2xl font-bold text-gray-800 mb-4 border-b-2 border-blue-500 pb-2">💰 Comisiones Pagadas por Nivel</h3>
                   <div className="overflow-x-auto">
@@ -382,6 +387,7 @@
                           <th className="px-4 py-3 text-right font-semibold">Unilevel</th>
                           <th className="px-4 py-3 text-right font-semibold">Infinito</th>
                           <th className="px-4 py-3 text-right font-semibold">Match</th>
+                          <th className="px-4 py-3 text-right font-semibold">Avance Rango</th>
                           <th className="px-4 py-3 text-right font-semibold bg-blue-200">Total Comisiones</th>
                         </tr>
                       </thead>
@@ -393,6 +399,7 @@
                             <td className="px-4 py-3 text-right text-blue-600">${calculos.unilevelPorNivel[idx].toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
                             <td className="px-4 py-3 text-right text-purple-600">${calculos.infinitoPorNivel[idx].toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
                             <td className="px-4 py-3 text-right text-green-600">${calculos.matchPorNivel[idx].toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+                            <td className="px-4 py-3 text-right text-amber-600">-</td>
                             <td className="px-4 py-3 text-right font-bold text-red-600 bg-gray-50">${calculos.comisionesPorNivel[idx].toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
                           </tr>
                         ))}
@@ -402,6 +409,7 @@
                           <td className="px-4 py-3 text-right text-blue-700">${calculos.comisionesUnilevelTotal.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
                           <td className="px-4 py-3 text-right text-purple-700">${calculos.comisionesInfinitoTotal.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
                           <td className="px-4 py-3 text-right text-green-700">${calculos.comisionesMatchTotal.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
+                          <td className="px-4 py-3 text-right text-amber-700">${calculos.comisionesAvanceRangoTotal.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
                           <td className="px-4 py-3 text-right text-red-700 bg-blue-300">${calculos.comisionesTotales.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
                         </tr>
                       </tbody>
@@ -413,7 +421,7 @@
           );
         };
 
-        ReactDOM.render(<CalculadoraEmpresaNN />, document.getElementById('root'));
+        ReactDOM.render(<CalculadoraEmpresaONANO />, document.getElementById('root'));
     </script>
 </body>
 </html>
