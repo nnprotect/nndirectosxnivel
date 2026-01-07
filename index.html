@@ -26,6 +26,7 @@
           const [niveles, setNiveles] = useState(12);
           const [vn, setVn] = useState(1800);
           const [vg, setVg] = useState(1800);
+          const [tipoCambio, setTipoCambio] = useState(1);
 
           // RANGOS ACTUALIZADOS
           const rangos = [
@@ -205,12 +206,14 @@
             const desgloseavanceRango = [];
             rangos.forEach(rango => {
               if (rango.bonoAvance > 0 && personasPorRango[rango.nombre] > 0) {
-                const totalBono = personasPorRango[rango.nombre] * rango.bonoAvance;
+                const bonoPorPersona = rango.bonoAvance * tipoCambio;
+                const totalBono = personasPorRango[rango.nombre] * bonoPorPersona;
                 comisionesAvanceRangoTotal += totalBono;
                 desgloseavanceRango.push({
                   rango: rango.nombre,
                   personas: personasPorRango[rango.nombre],
-                  bonoPorPersona: rango.bonoAvance,
+                  bonoUSD: rango.bonoAvance,
+                  bonoPorPersona,
                   totalBono
                 });
               }
@@ -240,7 +243,7 @@
               matchPorNivel,
               desgloseavanceRango
             };
-          }, [directos, niveles, vn, vg]);
+          }, [directos, niveles, vn, vg, tipoCambio]);
 
           return (
             <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 py-8">
@@ -254,7 +257,7 @@
 
                 <div className="bg-white rounded-xl shadow-2xl p-6 mb-6">
                   <h2 className="text-2xl font-bold text-gray-800 mb-4">Parámetros de Simulación</h2>
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-2">Directos por Persona</label>
                       <input type="number" min="1" max="20" value={directos} onChange={(e) => setDirectos(parseInt(e.target.value) || 1)} className="w-full px-4 py-3 border-2 border-blue-300 rounded-lg focus:border-blue-500 focus:outline-none text-lg font-semibold" />
@@ -270,6 +273,11 @@
                     <div>
                       <label className="block text-sm font-semibold text-gray-700 mb-2">GV por Persona</label>
                       <input type="number" min="0" step="10" value={vg} onChange={(e) => setVg(parseFloat(e.target.value) || 0)} className="w-full px-4 py-3 border-2 border-purple-300 rounded-lg focus:border-purple-500 focus:outline-none text-lg font-semibold" />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-semibold text-gray-700 mb-2">Tipo de Cambio</label>
+                      <input type="number" min="0" step="0.01" value={tipoCambio} onChange={(e) => setTipoCambio(parseFloat(e.target.value) || 1)} className="w-full px-4 py-3 border-2 border-orange-300 rounded-lg focus:border-orange-500 focus:outline-none text-lg font-semibold" />
+                      <p className="text-xs text-gray-500 mt-1">USD a moneda local</p>
                     </div>
                   </div>
                 </div>
@@ -330,7 +338,8 @@
                           <th className="px-4 py-3 text-right font-semibold">CV Requerido</th>
                           <th className="px-4 py-3 text-right font-semibold">GV Requerido</th>
                           <th className="px-4 py-3 text-right font-semibold">Infinito %</th>
-                          <th className="px-4 py-3 text-right font-semibold">Bono Avance</th>
+                          <th className="px-4 py-3 text-right font-semibold">Bono USD</th>
+                          <th className="px-4 py-3 text-right font-semibold">Bono Convertido</th>
                         </tr>
                       </thead>
                       <tbody>
@@ -340,7 +349,8 @@
                             <td className="px-4 py-3 text-right">{rango.pvRequerido.toLocaleString()}</td>
                             <td className="px-4 py-3 text-right">{rango.gvRequerido.toLocaleString()}</td>
                             <td className="px-4 py-3 text-right text-purple-600 font-semibold">{rango.infinito > 0 ? `${rango.infinito}%` : '-'}</td>
-                            <td className="px-4 py-3 text-right text-green-600 font-bold">{rango.bonoAvance > 0 ? `$${rango.bonoAvance.toLocaleString()}` : '-'}</td>
+                            <td className="px-4 py-3 text-right text-gray-600">{rango.bonoAvance > 0 ? `$${rango.bonoAvance.toLocaleString()}` : '-'}</td>
+                            <td className="px-4 py-3 text-right text-green-600 font-bold">{rango.bonoAvance > 0 ? `$${(rango.bonoAvance * tipoCambio).toLocaleString(undefined, {minimumFractionDigits: 2})}` : '-'}</td>
                           </tr>
                         ))}
                       </tbody>
@@ -356,8 +366,9 @@
                         <thead className="bg-amber-100">
                           <tr>
                             <th className="px-4 py-3 text-left font-semibold">Rango</th>
-                            <th className="px-4 py-3 text-right font-semibold">Personas que Alcanzaron</th>
-                            <th className="px-4 py-3 text-right font-semibold">Bono por Persona</th>
+                            <th className="px-4 py-3 text-right font-semibold">Personas</th>
+                            <th className="px-4 py-3 text-right font-semibold">Bono USD</th>
+                            <th className="px-4 py-3 text-right font-semibold">Bono Convertido</th>
                             <th className="px-4 py-3 text-right font-semibold">Total Pagado</th>
                           </tr>
                         </thead>
@@ -366,7 +377,8 @@
                             <tr key={idx} className="border-b hover:bg-gray-50">
                               <td className="px-4 py-3 font-semibold">{item.rango}</td>
                               <td className="px-4 py-3 text-right">{item.personas.toLocaleString()}</td>
-                              <td className="px-4 py-3 text-right text-green-600">${item.bonoPorPersona.toLocaleString()}</td>
+                              <td className="px-4 py-3 text-right text-gray-600">${item.bonoUSD.toLocaleString()}</td>
+                              <td className="px-4 py-3 text-right text-green-600 font-semibold">${item.bonoPorPersona.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
                               <td className="px-4 py-3 text-right font-bold text-amber-600">${item.totalBono.toLocaleString(undefined, {minimumFractionDigits: 2})}</td>
                             </tr>
                           ))}
